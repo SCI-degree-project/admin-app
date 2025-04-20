@@ -30,12 +30,12 @@ function Header() {
             </li>
             <li>
               <a href="/metrics" className="text-gray-700 hover:text-black">
-                Metrics
+                Analytics
               </a>
             </li>
             <li>
               <a href="#profile" className="text-gray-700 hover:text-black">
-                Profile
+                Settings
               </a>
             </li>
           </ul>
