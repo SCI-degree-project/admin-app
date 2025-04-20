@@ -1,31 +1,21 @@
-import { useEffect, useState } from "react";
-import { onUserStateChange, logout } from "./services/authService";
 import Login from "./components/Login";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { Home } from "./pages/Home";
+import { NotFound } from "./pages/NotFound";
+import { Layout } from "./pages/Layout";
 
 function App() {
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    const unsubscribe = onUserStateChange(setUser);
-    return () => unsubscribe();
-  }, []);
-
   return (
-    <div>
-      {user ? (
-        <div className="p-4">
-          <h1 className="text-xl">Hola, {user.displayName}</h1>
-          <button
-            onClick={logout}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded"
-          >
-            Cerrar sesión
-          </button>
-        </div>
-      ) : (
-        <Login />
-      )}
-    </div>
+    <Routes>
+      <Route path="/" element={<Navigate to="/home" />} />
+      <Route path="/login" element={<Login />} />
+
+      <Route element={<Layout />}>
+        <Route path="/home" element={<Home />} />
+      </Route>
+
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 
