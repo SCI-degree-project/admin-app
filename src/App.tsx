@@ -1,8 +1,9 @@
-import Login from "./components/Login";
+import Login from "./modules/auth/components/Login";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { Home } from "./pages/Home";
-import { NotFound } from "./pages/NotFound";
-import { Layout } from "./pages/Layout";
+import { Home } from "./modules/catalog/components/Home";
+import { NotFound } from "./modules/core/components/NotFound";
+import { Layout } from "./modules/core/layouts/Layout";
+import ProductForm from "./modules/catalog/components/ProductForm";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
 
       <Route element={<Layout />}>
         <Route path="/home" element={<Home />} />
+        <Route path="/product-form" element={<ProductForm />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

@@ -1,8 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
 
 function Header() {
-  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -26,6 +24,11 @@ function Header() {
           } absolute top-full left-0 w-full bg-white shadow-md md:shadow-none md:static md:block md:w-auto md:bg-transparent order-3`}
         >
           <ul className="flex flex-col md:flex-row md:items-center gap-4 p-4 md:p-0">
+          <li>
+              <a href="/product-form" className="text-gray-700 hover:text-black">
+                Add Product
+              </a>
+            </li>
             <li>
               <a href="#catalog" className="text-gray-700 hover:text-black">
                 Catalog
