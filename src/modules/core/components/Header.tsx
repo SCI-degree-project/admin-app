@@ -23,18 +23,23 @@ function Header() {
             } absolute top-full left-0 w-full bg-white shadow-md md:shadow-none md:static md:block md:w-auto md:bg-transparent order-3`}
         >
           <ul className="flex flex-col md:flex-row md:items-center gap-4 p-4 md:p-0">
+          <li>
+              <a href="/product-form" className="text-gray-700 hover:text-black">
+                Add Product
+              </a>
+            </li>
             <li>
               <a href="/" className="text-gray-700 hover:text-black">
                 Catalog
               </a>
             </li>
             <li>
-              <a href="/metrics" className="text-gray-700 hover:text-black">
+              <a href="/analyticss" className="text-gray-700 hover:text-black">
                 Analytics
               </a>
             </li>
             <li>
-              <a href="#profile" className="text-gray-700 hover:text-black">
+              <a href="/settings" className="text-gray-700 hover:text-black">
                 Settings
               </a>
             </li>

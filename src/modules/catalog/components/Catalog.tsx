@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "./ProductCard";
 
 type Product = {
   id: number;
@@ -9,7 +9,7 @@ type Product = {
   price: string;
 };
 
-function Home() {
+function Catalog() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
@@ -102,4 +102,4 @@ function Home() {
   );
 }
 
-export { Home };
+export { Catalog };

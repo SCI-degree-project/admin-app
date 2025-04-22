@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.2",
     "@tailwindcss/vite": "^4.1.4",
     "admin-app": "file:",
     "firebase": "^11.6.0",

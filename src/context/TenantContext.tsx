@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { onUserStateChange } from "../services/authService";
+import { onUserStateChange } from "../modules/auth/services/authService";
 
 interface TenantContextType {
   tenantId: string | null;
