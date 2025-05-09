@@ -1,4 +1,3 @@
-// ProductCard.tsx
 import React, { useState } from "react";
 import ConfirmPopup from "../../core/components/ConfirmPopup";
 

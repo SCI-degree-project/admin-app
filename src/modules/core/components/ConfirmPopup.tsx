@@ -1,4 +1,3 @@
-// ConfirmPopup.tsx
 import React from "react";
 
 type ConfirmPopupProps = {
