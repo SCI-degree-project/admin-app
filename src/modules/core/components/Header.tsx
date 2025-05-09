@@ -5,7 +5,7 @@ function Header() {
 
   return (
     <header className="bg-white shadow-md p-4">
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="w-full max-w-screen-xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 flex justify-between items-center">
         <div className="text-xl font-bold text-gray-800 order-2 md:order-1">
           DecorAR
         </div>
@@ -23,7 +23,7 @@ function Header() {
             } absolute top-full left-0 w-full bg-white shadow-md md:shadow-none md:static md:block md:w-auto md:bg-transparent order-3`}
         >
           <ul className="flex flex-col md:flex-row md:items-center gap-4 p-4 md:p-0">
-          <li>
+            <li>
               <a href="/product-form" className="text-gray-700 hover:text-black">
                 Add Product
               </a>

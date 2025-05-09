@@ -14,3 +14,14 @@ export const createProduct = async (formData: FormData, tenantId: string): Promi
   });
   return response.data;
 };
+
+export const fetchProductsPaginated = async (
+  tenantId: string,
+  page: number,
+  size: number = 12
+): Promise<Product[]> => {
+  const response = await axios.get(`${API_URL}/products/${tenantId}`, {
+    params: { page, size }
+  });
+  return response.data;
+};
