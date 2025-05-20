@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import ConfirmPopup from "../../core/components/ConfirmPopup";
 
 type ProductCardProps = {
-    imageUrl: string;
     name: string;
-    price: string;
+    imageUrl: string;
     onEdit?: () => void;
     onDelete?: () => void;
 };
 
-const ProductCard: React.FC<ProductCardProps> = ({ imageUrl, name, price, onEdit, onDelete }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ name, imageUrl, onEdit, onDelete }) => {
     const [showConfirm, setShowConfirm] = useState(false);
 
     const handleDelete = () => {
@@ -31,7 +30,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ imageUrl, name, price, onEdit
                 />
                 <div className="p-4 text-left">
                     <h3 className="text-xl font-semibold text-gray-900">{name}</h3>
-                    <p className="text-sm text-gray-900 mt-2">{price}</p>
 
                     <div className="flex gap-2 mt-4">
                         <button

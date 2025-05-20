@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import ProductCard from "./ProductCard";
 import { fetchProductsPaginated } from "../services/productService";
-import { Product } from "../../../domain/Product";
 import { useTenant } from "../../../context/TenantContext";
 import { NotFound } from "../../core/components/NotFound";
+import { ProductPreview } from "../../../domain/ProductPreview";
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 10;
 
 const Catalog = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [page, setPage] = useState(0);
+  const [products, setProducts] = useState<ProductPreview[]>([]);
+  const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -18,24 +18,23 @@ const Catalog = () => {
 
   const loadMore = useCallback(async () => {
     if (!tenantId || loading || !hasMore) return;
-
+  
     setLoading(true);
     try {
-      const newProducts = await fetchProductsPaginated(tenantId, page, PAGE_SIZE);
-      setProducts((prev) => [...prev, ...newProducts]);
-
-      if (newProducts.length < PAGE_SIZE) {
-        setHasMore(false);
-      } else {
-        setPage((prev) => prev + 1);
-      }
+      const { content, last } = await fetchProductsPaginated(tenantId, page, PAGE_SIZE);
+  
+      if (!Array.isArray(content)) throw new Error("Respuesta inesperada");
+  
+      setProducts((prev) => [...prev, ...content]);
+      setHasMore(!last);
+      setPage((prev) => prev + 1);
     } catch (err) {
       console.error("Error fetching products:", err);
       setError(true);
     } finally {
       setLoading(false);
     }
-  }, [tenantId, page, loading, hasMore]);
+  }, [tenantId, page, loading, hasMore]);  
 
   useEffect(() => {
     if (tenantId) {
@@ -77,11 +76,10 @@ const Catalog = () => {
       <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <ProductCard
-            key={product.id}
-            name={product.name}
-            price={`$${product.price.toFixed(2)}`}
-            imageUrl={product.gallery?.[0] ?? ""}
-          />
+          key={product.id}
+          name={product.name}
+          imageUrl={product.cover}
+        />        
         ))}
       </section>
 
