@@ -4,6 +4,7 @@ import { useTenant } from "../../../context/TenantContext";
 import { materialOptions, Material } from "../../../domain/Material";
 import { styleOptions, Style } from "../../../domain/Style";
 import ImagePreview from "./ImagePreview";
+import Model3DUploadPopup from "./Model3DUploadPopup";
 
 const ProductForm: React.FC = () => {
     const [name, setName] = useState("");
@@ -12,6 +13,7 @@ const ProductForm: React.FC = () => {
     const [materials, setMaterials] = useState<Material[]>([]);
     const [style, setStyle] = useState<Style>("MODERN");
     const [imageFiles, setImageFiles] = useState<File[]>([]);
+    const [showModelPopup, setShowModelPopup] = useState(false);
 
     const { tenantId } = useTenant();
     const { createProduct, loading, error } = useCreateProduct();
@@ -92,7 +94,7 @@ const ProductForm: React.FC = () => {
 
                         {imageFiles.length < 10 && (
                             <div className="mb-4">
-                                <label className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow-sm hover:bg-blue-700 cursor-pointer transition">
+                                <label className="inline-flex items-center px-4 py-2 bg-white text-blue-600 rounded-lg border-2 border-blue-600 shadow-sm hover:bg-blue-600 hover:text-white cursor-pointer transition">
                                     <svg
                                         className="w-5 h-5 mr-2"
                                         fill="none"
@@ -180,18 +182,42 @@ const ProductForm: React.FC = () => {
                         </select>
                     </div>
 
-                    <div className="pt-4">
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">3D Model</label>
                         <button
-                            type="submit"
-                            disabled={loading}
-                            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                            type="button"
+                            onClick={() => setShowModelPopup(true)}
+                            className="bg-white text-blue-600 border-2 border-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition"
                         >
-                            {loading ? "Saving..." : "Save Product"}
+                            Add 3D Model
                         </button>
-                        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
                     </div>
                 </div>
             </form>
+
+            <div className="flex justify-center mt-6 pt-4">
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                >
+                    {loading ? "Saving..." : "Save Product"}
+                </button>
+                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+            </div>
+
+            {showModelPopup && (
+                <Model3DUploadPopup
+                    onClose={() => setShowModelPopup(false)}
+                    onSelectExisting={() => {
+                        setShowModelPopup(false);
+                    }}
+                    onCreateNew={() => {
+                        setShowModelPopup(false);
+                    }}
+                />
+            )}
+
         </div>
     );
 };
