@@ -5,11 +5,11 @@ export const useCreateProduct = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleCreateProduct = async (formData: FormData, tenantId: string) => {
+  const handleCreateProduct = async (formData: FormData) => {
     setLoading(true);
     setError(null);
     try {
-      const product = await createProduct(formData, tenantId);
+      const product = await createProduct(formData);
       return product;
     } catch (err: any) {
       setError(err.message || 'Unknown error');
