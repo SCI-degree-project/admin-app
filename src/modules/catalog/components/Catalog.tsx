@@ -4,17 +4,20 @@ import { fetchProductsPaginated } from "../services/productService";
 import { useTenant } from "../../../context/TenantContext";
 import { NotFound } from "../../core/components/NotFound";
 import { ProductPreview } from "../../../domain/ProductPreview";
+import { useDeleteProduct } from "../hooks/useDeleteProduct";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 20;
 
 const Catalog = () => {
   const [products, setProducts] = useState<ProductPreview[]>([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const { tenantId } = useTenant();
   const loaderRef = useRef<HTMLDivElement>(null);
+
+  const { handleDeleteProduct } = useDeleteProduct(products, setProducts);
 
   const loadMore = useCallback(async () => {
     if (!tenantId || loading || !hasMore) return;
@@ -79,6 +82,9 @@ const Catalog = () => {
           key={product.id}
           name={product.name}
           imageUrl={product.cover}
+          onDelete={() => {
+              if (tenantId) handleDeleteProduct(tenantId, product.id);
+            }}
         />        
         ))}
       </section>
