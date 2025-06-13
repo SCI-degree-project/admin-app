@@ -6,9 +6,6 @@ function Header() {
   return (
     <header className="bg-white shadow-md p-4">
       <div className="w-full max-w-screen-xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 flex justify-between items-center">
-        <div className="text-xl font-bold text-gray-800 order-2 md:order-1">
-          DecorAR
-        </div>
 
         <button
           className="md:hidden order-1"
@@ -17,6 +14,10 @@ function Header() {
         >
           {menuOpen ? <div>Close</div> : <div>Menu</div>}
         </button>
+
+        <div className="text-xl font-bold text-gray-800 order-2 md:order-1">
+          DecorAR
+        </div>
 
         <nav
           className={`${menuOpen ? "block" : "hidden"

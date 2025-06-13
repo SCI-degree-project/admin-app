@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Product } from '../../../domain/Product';
 import { ProductPreview } from '../../../domain/ProductPreview';
+import { SearchProductParams } from '../../../domain/SearchProductParams';
 
 const API_URL = import.meta.env.VITE_GATEWAY_URL;
 
@@ -14,7 +15,7 @@ export const createProduct = async (formData: FormData): Promise<Product> => {
 export const fetchProductsPaginated = async (
   tenantId: string,
   page: number,
-  size: number = 25
+  size: number = 20
 ): Promise<{ content: ProductPreview[]; last: boolean }> => {
   const response = await axios.get(`${API_URL}/products/${tenantId}`, {
     params: { page, size },
@@ -56,4 +57,29 @@ export const deleteProduct = async (
   productId: string
 ): Promise<void> => {
   await axios.delete(`${API_URL}/products/${tenantId}/${productId}`);
+};
+
+export const searchProducts = async ({
+  name,
+  style,
+  materials,
+  sortBy = "name",
+  direction = "asc",
+  page = 0,
+  size = 20,
+  tenantId
+}: SearchProductParams): Promise<{ content: ProductPreview[]; last: boolean }> => {
+  const response = await axios.post(`${API_URL}/products/search`, {
+    name,
+    style,
+    materials,
+    sortBy,
+    direction,
+    page,
+    size,
+    tenantId
+  });
+
+  const { content, last } = response.data;
+  return { content: content ?? [], last };
 };
