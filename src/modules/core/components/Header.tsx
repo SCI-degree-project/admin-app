@@ -25,7 +25,7 @@ function Header() {
         >
           <ul className="flex flex-col md:flex-row md:items-center gap-4 p-4 md:p-0">
             <li>
-              <a href="/product-form" className="text-gray-700 hover:text-black">
+              <a href="/new-product" className="text-gray-700 hover:text-black">
                 Add Product
               </a>
             </li>

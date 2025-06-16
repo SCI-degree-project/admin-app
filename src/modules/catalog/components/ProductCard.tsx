@@ -8,6 +8,7 @@ type ProductCardProps = {
   imageUrl: string;
   onEdit?: () => void;
   onDelete?: () => void;
+  onClick?: () => void;
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -15,6 +16,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   imageUrl,
   onEdit,
   onDelete,
+  onClick
 }) => {
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -35,6 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             src={imageUrl}
             alt={name}
             className="w-full h-56 object-cover opacity-80"
+            onClick={onClick}
           />
           <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <button

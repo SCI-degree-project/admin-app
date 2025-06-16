@@ -7,8 +7,11 @@ import { ProductPreview } from "../../../domain/ProductPreview";
 import { useDeleteProduct } from "../hooks/useDeleteProduct";
 import SearchInput from "./SearchInput";
 import { useDebounce } from "use-debounce";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Catalog = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState<ProductPreview[]>([]);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -17,7 +20,7 @@ const Catalog = () => {
   const { tenantId } = useTenant();
   const loaderRef = useRef<HTMLDivElement>(null);
 
-  const { handleDeleteProduct } = useDeleteProduct(products, setProducts);
+  const { handleDeleteProduct } = useDeleteProduct();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
@@ -28,7 +31,6 @@ const Catalog = () => {
     setLoading(true);
     try {
       const { content, last } = await fetchProductsPaginated(tenantId, page);
-
       if (!Array.isArray(content)) throw new Error("Error");
 
       setProducts((prev) => [...prev, ...content]);
@@ -73,7 +75,7 @@ const Catalog = () => {
     if (!tenantId) return;
 
     const fetchResults = async () => {
-      if (searchTerm.trim() === "") return
+      if (searchTerm.trim() === "") return;
       if (debouncedSearchTerm.trim()) {
         try {
           const result = await searchProducts({ tenantId, name: debouncedSearchTerm });
@@ -88,7 +90,6 @@ const Catalog = () => {
     fetchResults();
   }, [debouncedSearchTerm, tenantId]);
 
-
   useEffect(() => {
     if (searchTerm.trim() === "") {
       setProducts([]);
@@ -97,6 +98,22 @@ const Catalog = () => {
       loadMore();
     }
   }, [searchTerm]);
+
+  const handleDelete = async (productId: string) => {
+    if (!tenantId) return;
+
+    try {
+      await handleDeleteProduct(tenantId, productId);
+      toast.success("Product deleted successfully");
+      
+      setProducts([]);
+      setPage(0);
+      setHasMore(true);
+      loadMore();
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
+  };
 
   if (error) return <NotFound />;
 
@@ -119,9 +136,8 @@ const Catalog = () => {
             id={product.id}
             name={product.name}
             imageUrl={product.cover}
-            onDelete={() => {
-              if (tenantId) handleDeleteProduct(tenantId, product.id);
-            }}
+            onDelete={() => handleDelete(product.id)}
+            onClick={() => navigate(`/product/${product.id}`)}
           />
         ))}
       </section>
