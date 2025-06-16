@@ -6,6 +6,7 @@ import { styleOptions, Style } from "../../../domain/Style";
 import ImagePreview from "./ImagePreview";
 import Model3DUploadPopup from "./Model3DUploadPopup";
 import InfoTooltip from "../../../assets/InfoTooltip";
+import { toast } from "react-toastify";
 
 
 const ProductForm: React.FC = () => {
@@ -43,6 +44,7 @@ const ProductForm: React.FC = () => {
 
         try {
             await createProduct(formData);
+            toast.success("Product created successfully");
             setName("");
             setDescription("");
             setPrice("");
