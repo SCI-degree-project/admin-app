@@ -1,31 +1,40 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useState } from "react";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 
-interface ImagePreviewProps {
-  file: File;
+type ImagePreviewProps = {
+  file: File | string;
   onRemove: () => void;
-}
+};
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({ file, onRemove }) => {
-  const previewUrl = useMemo(() => URL.createObjectURL(file), [file]);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+
+  useEffect(() => {
+    if (typeof file === "string") {
+      setPreviewUrl(file);
+    } else {
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
+
+      return () => URL.revokeObjectURL(objectUrl);
+    }
+  }, [file]);
 
   return (
-    <div className="flex items-center gap-3 relative group">
+    <div className="relative group w-16 h-16">
       <img
         src={previewUrl}
-        alt={file.name}
-        className="w-10 h-10 object-cover rounded border"
+        alt="Preview"
+        className="w-full h-full object-cover rounded border"
       />
-      <div className="truncate max-w-[180px]">
-        <p className="text-sm font-medium text-gray-700 truncate">{file.name}</p>
-        <p className="text-xs text-gray-500">{file.type}</p>
-      </div>
+
       <button
         type="button"
         onClick={onRemove}
-        className="text-red-500 text-sm absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute top-0 right-0 m-1 p-0.5 bg-white rounded-full shadow text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
         title="Remove"
       >
-        ✕
+        <XMarkIcon className="w-4 h-4" />
       </button>
     </div>
   );

@@ -48,7 +48,9 @@ export const patchProduct = async (
   tenantId: string,
   productId: string
 ): Promise<Product> => {
-  const response = await axios.patch(`${API_URL}/products/${tenantId}/${productId}`, partialData);
+  const response = await axios.patch(`${API_URL}/products/${tenantId}/${productId}`, partialData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
   return response.data;
 };
 

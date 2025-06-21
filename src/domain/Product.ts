@@ -6,8 +6,8 @@ type Product = {
     materials: string[];
     style: string
     tenantId: string;
-    gallery: string[];
-    model: string
+    gallery: File[];
+    model: File
 }
 
 export type { Product };

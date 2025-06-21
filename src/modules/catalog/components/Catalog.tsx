@@ -138,6 +138,7 @@ const Catalog = () => {
             imageUrl={product.cover}
             onDelete={() => handleDelete(product.id)}
             onClick={() => navigate(`/product/${product.id}`)}
+            onEdit={() => navigate(`/product/edit/${product.id}`)}
           />
         ))}
       </section>
