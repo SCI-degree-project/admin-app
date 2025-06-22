@@ -1,75 +1,85 @@
 import React, { useState } from "react";
-import { useCreateProduct } from "../hooks/useCreateProduct";
-import { useTenant } from "../../../context/TenantContext";
-import { materialOptions, Material } from "../../../domain/Material";
+import { materialOptions } from "../../../domain/Material";
 import { styleOptions, Style } from "../../../domain/Style";
-import ImagePreview from "./ImagePreview";
-import Model3DUploadPopup from "./Model3DUploadPopup";
 import InfoTooltip from "../../../assets/InfoTooltip";
-import { toast } from "react-toastify";
+import Model3DUploadPopup from "./Model3DUploadPopup";
+import ImagePreview from "./ImagePreview";
 
+type ProductFormBaseProps = {
+    initialData?: {
+        name?: string;
+        description?: string;
+        price?: number;
+        materials?: string[];
+        style?: string;
+        gallery?: File[];
+        modelFile?: File | null;
+    };
+    actionName?: string;
+    onSubmit: (formData: FormData) => void;
+    isSubmitting?: boolean;
+    error?: string | null;
+};
 
-const ProductForm: React.FC = () => {
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [price, setPrice] = useState("");
-    const [materials, setMaterials] = useState<Material[]>([]);
-    const [style, setStyle] = useState<Style>("MODERN");
-    const [imageFiles, setImageFiles] = useState<File[]>([]);
+const ProductFormBase: React.FC<ProductFormBaseProps> = ({
+    initialData,
+    actionName,
+    onSubmit,
+    isSubmitting,
+    error,
+}) => {
+    const [name, setName] = useState(initialData?.name ?? "");
+    const [description, setDescription] = useState(initialData?.description ?? "");
+    const [price, setPrice] = useState(initialData?.price?.toString() ?? "");
+    const [materials, setMaterials] = useState<string[]>(initialData?.materials ?? []);
+    const [style, setStyle] = useState<string>(initialData?.style ?? "MODERN");
+    const [imageFiles, setImageFiles] = useState<File[]>(initialData?.gallery ?? []);
+    const [modelFile, setModelFile] = useState<File | null>(initialData?.modelFile ?? null);
     const [showModelPopup, setShowModelPopup] = useState(false);
-    const [modelFile, setModelFile] = useState<File | null>(null);
 
-    const { tenantId } = useTenant();
-    const { createProduct, loading, error } = useCreateProduct();
-
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!tenantId) return;
 
         const formData = new FormData();
-        formData.append("name", name);
-        formData.append("description", description);
-        formData.append("price", price);
-        materials.forEach((m) => formData.append("materials", m));
-        formData.append("style", style);
-        formData.append("tenantId", tenantId);
-        imageFiles.forEach((file) => formData.append("gallery", file));
+
+        if (name !== initialData?.name) formData.append("name", name);
+        if (description !== initialData?.description) formData.append("description", description);
+        if (price !== initialData?.price?.toString()) formData.append("price", price);
+        if (style !== initialData?.style) formData.append("style", style);
+
+        const originalMaterials = initialData?.materials ?? [];
+        const materialsChanged =
+            materials.length !== originalMaterials.length ||
+            materials.some((m) => !originalMaterials.includes(m));
+        if (materialsChanged) {
+            materials.forEach((m) => formData.append("materials", m));
+        }
+
+        imageFiles.forEach((f) => formData.append("gallery", f));
+
         if (modelFile) {
             formData.append("model", modelFile);
         }
 
-        for (const [key, val] of formData.entries()) {
-            console.log(key, val);
-        }
-
         try {
-            await createProduct(formData);
-            toast.success("Product created successfully");
-            setName("");
-            setDescription("");
-            setPrice("");
-            setMaterials([]);
-            setStyle("MODERN");
-            setImageFiles([]);
-            setModelFile(null);
-        } catch (err) {
-            console.error("Error creating product:", err);
+            onSubmit(formData);
+        } catch (e) {
+            console.error("Error submitting form:", e);
         }
     };
 
     return (
-        <div className="w-full mx-auto mt-2 px-4 sm:px-4 md:px-12 lg:px-24 py-8 bg-white">
-            <h2 className="text-3xl font-bold mb-8 text-gray-800 text-center">Add new Product</h2>
-            <form className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div>
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-base font-semibold text-gray-700">Name</label>
+                        <label className="block text-base font-semibold text-gray-700">Name *</label>
                         <input
                             type="text"
                             value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="w-full border rounded-lg px-4 py-2 mt-1"
+                            onChange={e => setName(e.target.value)}
                             required
+                            className="w-full border rounded-lg px-4 py-2 mt-1"
                         />
                     </div>
 
@@ -77,23 +87,59 @@ const ProductForm: React.FC = () => {
                         <label className="block text-base font-semibold text-gray-700">Description</label>
                         <textarea
                             value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            className="w-full border rounded-lg px-4 py-2 mt-1"
+                            onChange={e => setDescription(e.target.value)}
                             rows={3}
-                            required
+                            className="w-full border rounded-lg px-4 py-2 mt-1"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-base font-semibold text-gray-700">Price</label>
+                        <label className="block text-base font-semibold text-gray-700">Price *</label>
                         <input
                             type="number"
                             value={price}
-                            onChange={(e) => setPrice(e.target.value)}
-                            className="w-full border rounded-lg px-4 py-2 mt-1"
+                            onChange={e => setPrice(e.target.value)}
                             step="0.01"
                             required
+                            className="w-full border rounded-lg px-4 py-2 mt-1"
                         />
+                    </div>
+
+                    <div>
+                        <label className="block text-base font-semibold text-gray-700">Style</label>
+                        <select
+                            value={style}
+                            onChange={e => setStyle(e.target.value as Style)}
+                            className="w-full border rounded-lg px-4 py-2 mt-1"
+                        >
+                            {styleOptions.map(opt => (
+                                <option key={opt} value={opt}>{opt}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <div className="space-y-4">
+                    <div>
+                        <label className="block text-base font-semibold text-gray-700 mb-2">Materials *</label>
+                        <div className="grid grid-cols-2 gap-2">
+                            {materialOptions.map(material => (
+                                <label key={material} className="flex items-center space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={materials.includes(material)}
+                                        onChange={() =>
+                                            setMaterials(prev =>
+                                                prev.includes(material)
+                                                    ? prev.filter(m => m !== material)
+                                                    : [...prev, material]
+                                            )
+                                        }
+                                    />
+                                    <span className="text-sm">{material}</span>
+                                </label>
+                            ))}
+                        </div>
                     </div>
 
                     <div>
@@ -153,7 +199,7 @@ const ProductForm: React.FC = () => {
                             </div>
                         )}
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
+                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-x-4 gap-y-2">
                             {imageFiles.map((file, idx) => (
                                 <ImagePreview
                                     key={file.name + idx}
@@ -162,45 +208,6 @@ const ProductForm: React.FC = () => {
                                 />
                             ))}
                         </div>
-                    </div>
-                </div>
-
-                <div className="space-y-4">
-                    <div>
-                        <label className="block text-base font-semibold text-gray-700 mb-2">Materials</label>
-                        <div className="grid grid-cols-2 gap-2">
-                            {materialOptions.map((material) => (
-                                <label key={material} className="flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        checked={materials.includes(material)}
-                                        onChange={() =>
-                                            setMaterials((prev) =>
-                                                prev.includes(material)
-                                                    ? prev.filter((m) => m !== material)
-                                                    : [...prev, material]
-                                            )
-                                        }
-                                    />
-                                    <span className="text-sm">{material}</span>
-                                </label>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-base font-semibold text-gray-700">Style</label>
-                        <select
-                            value={style}
-                            onChange={(e) => setStyle(e.target.value as Style)}
-                            className="w-full border rounded-lg px-4 py-2 mt-1"
-                        >
-                            {styleOptions.map((opt) => (
-                                <option key={opt} value={opt}>
-                                    {opt}
-                                </option>
-                            ))}
-                        </select>
                     </div>
 
                     <div>
@@ -245,35 +252,40 @@ const ProductForm: React.FC = () => {
 
                     </div>
                 </div>
+
+                {showModelPopup && (
+                    <Model3DUploadPopup
+                        onClose={() => setShowModelPopup(false)}
+                        onSelectExisting={(file) => {
+                            setModelFile(file);
+                            setShowModelPopup(false);
+                        }}
+                        onCreateNew={() => {
+                            setShowModelPopup(false);
+                            // TODO: Navigate to AR modeling screen if applicable
+                        }}
+                    />
+                )}
             </form>
 
             <div className="flex justify-center mt-6 pt-4">
                 <button
                     type="submit"
                     onClick={handleSubmit}
-                    disabled={loading}
+                    disabled={isSubmitting}
                     className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
                 >
-                    {loading ? "Saving..." : "Save Product"}
+                    {isSubmitting ? (
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                        actionName
+                    )}
+
                 </button>
                 {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
             </div>
-
-            {showModelPopup && (
-                <Model3DUploadPopup
-                    onClose={() => setShowModelPopup(false)}
-                    onSelectExisting={(file) => {
-                        setModelFile(file);
-                        setShowModelPopup(false);
-                    }}
-                    onCreateNew={() => {
-                        setShowModelPopup(false);
-                    }}
-                />
-            )}
-
         </div>
     );
 };
 
-export default ProductForm;
+export default ProductFormBase;

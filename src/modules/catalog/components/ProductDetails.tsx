@@ -61,7 +61,7 @@ const ProductDetails: React.FC = () => {
           </button>
 
           <button
-            onClick={() => navigate(`/edit-product/${product.id}`)}
+            onClick={() => navigate(`/product/edit/${product.id}`)}
             className="flex items-center gap-2 px-4 py-2 text-sm border border-yellow-500 text-yellow-500 rounded hover:bg-yellow-500 hover:text-white"
           >
             <PencilSquareIcon className="w-5 h-5" />
