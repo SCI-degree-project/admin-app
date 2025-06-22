@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
 interface ProductGalleryProps {
-    images: string[];
+    images: File[];
 }
 
 const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {

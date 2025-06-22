@@ -45,12 +45,6 @@ const Catalog = () => {
   }, [tenantId, page, loading, hasMore]);
 
   useEffect(() => {
-    if (tenantId) {
-      loadMore();
-    }
-  }, [tenantId]);
-
-  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
