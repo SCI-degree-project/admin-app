@@ -35,7 +35,7 @@ function Header() {
               </a>
             </li>
             <li>
-              <a href="/analyticss" className="text-gray-700 hover:text-black">
+              <a href="/analytics" className="text-gray-700 hover:text-black">
                 Analytics
               </a>
             </li>
