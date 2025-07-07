@@ -1,34 +1,42 @@
-import React from "react";
-import { signInWithGoogle } from "../services/authService";
+import { useState } from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../../firebase';
+import { useNavigate } from 'react-router-dom';
 
-const Login: React.FC = () => {
-  const handleLogin = async () => {
+export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      const user = await signInWithGoogle();
-      alert(`Bienvenido ${user.displayName}`);
-    } catch (err) {
-      alert("Error logging in");
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const token = await userCredential.user.getIdToken();
+
+      const res = await fetch('http://localhost:3001/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken: token }),
+      });
+
+      if (!res.ok) throw new Error('Login failed');
+
+      const data = await res.json();
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      navigate('/catalog');
+    } catch (err: any) {
+      alert('Login error: ' + err.message);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm">
-        <h1 className="text-3xl font-semibold text-center mb-6 text-gray-800">
-          Login
-        </h1>
-        <p className="text-center text-gray-600 mb-4">
-          Use your Google account to continue
-        </p>
-        <button
-          onClick={handleLogin}
-          className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
-          Login with Google
-        </button>
-      </div>
-    </div>
+    <form onSubmit={handleLogin}>4
+      <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+      <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" />
+      <button type="submit">Login</button>
+    </form>
   );
-};
-
-export default Login;
+}
