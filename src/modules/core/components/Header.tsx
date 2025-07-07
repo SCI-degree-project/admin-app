@@ -1,51 +1,54 @@
 import { useState } from "react";
+import { Bars3Icon, ChevronDownIcon } from "@heroicons/react/24/outline";
+import { logout } from "../../auth/services/authService";
 
-function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
+function Header({ onToggleSidebar }: { onToggleSidebar: () => void }) {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      window.location.href = "/login";
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
+  };
 
   return (
-    <header className="bg-white shadow-md p-4">
-      <div className="w-full max-w-screen-xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 flex justify-between items-center">
-
+    <header className="bg-white shadow-sm p-4 fixed w-full z-50">
+      <div className="w-full max-w-screen-xl mx-auto flex justify-between items-center relative">
         <button
-          className="md:hidden order-1"
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={onToggleSidebar}
+          className="md:hidden"
           aria-label="Toggle menu"
         >
-          {menuOpen ? <div>Close</div> : <div>Menu</div>}
+          <Bars3Icon className="w-6 h-6 text-gray-700" />
         </button>
 
-        <div className="text-xl font-bold text-gray-800 order-2 md:order-1">
-          DecorAR
-        </div>
+        <div className="ml-auto relative">
+          <button
+            onClick={() => setDropdownOpen((prev) => !prev)}
+            className="flex items-center gap-2"
+          >
+            <img
+              src="/placeholder-user.png"
+              alt="User avatar"
+              className="w-8 h-8 rounded-full"
+            />
+            <ChevronDownIcon className="w-5 h-5 text-gray-600" />
+          </button>
 
-        <nav
-          className={`${menuOpen ? "block" : "hidden"
-            } absolute top-full left-0 w-full bg-white shadow-md md:shadow-none md:static md:block md:w-auto md:bg-transparent order-3`}
-        >
-          <ul className="flex flex-col md:flex-row md:items-center gap-4 p-4 md:p-0">
-            <li>
-              <a href="/new-product" className="text-gray-700 hover:text-black">
-                Add Product
-              </a>
-            </li>
-            <li>
-              <a href="/" className="text-gray-700 hover:text-black">
-                Catalog
-              </a>
-            </li>
-            <li>
-              <a href="/analytics" className="text-gray-700 hover:text-black">
-                Analytics
-              </a>
-            </li>
-            <li>
-              <a href="/settings" className="text-gray-700 hover:text-black">
-                Settings
-              </a>
-            </li>
-          </ul>
-        </nav>
+          {dropdownOpen && (
+            <div className="absolute right-0 mt-2 w-40 bg-white border rounded-md shadow-lg py-2 z-50">
+              <button
+                onClick={handleLogout}
+                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

@@ -29,7 +29,7 @@ const ProductDetails: React.FC = () => {
     try {
       await handleDeleteProduct(tenantId, productId);
       toast.success("Product deleted successfully");
-      navigate("/catalog");
+      navigate("/products");
     } catch (err) {
       console.error("Delete failed:", err);
     }

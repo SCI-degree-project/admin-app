@@ -14,7 +14,7 @@ export function useLogin() {
             const { user, token } = await loginWithEmail(email, password);
             localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));
-            navigate('/catalog');
+            navigate('/products');
             return user;
         } catch (err: any) {
             if (
