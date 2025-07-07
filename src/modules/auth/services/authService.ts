@@ -1,20 +1,24 @@
-import { signInWithPopup } from "firebase/auth";
-import { auth, provider } from "../../../firebase";
+import {
+  signInWithEmailAndPassword,
+  signOut
+} from 'firebase/auth';
+import { auth } from '../../../config/firebase';
 
-export const signInWithGoogle = async () => {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    console.log("Usuario autenticado:", user);
-    return user;
-  } catch (error) {
-    console.error("Error al autenticar con Google:", error);
-    throw error;
-  }
-};
+export async function loginWithEmail(email: string, password: string) {
+  const userCredential = await signInWithEmailAndPassword(auth, email, password);
+  const idToken = await userCredential.user.getIdToken();
 
+  const res = await fetch('http://localhost:3001/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ idToken }),
+  });
 
-import { signOut } from "firebase/auth";
+  if (!res.ok) throw new Error('Login failed');
+
+  const data = await res.json();
+  return { user: data.user, token: idToken };
+}
 
 export const logout = async () => {
   await signOut(auth);
