@@ -96,3 +96,6 @@ Desktop.ini
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+
+# Firebase config
+src/config/firebase.ts
