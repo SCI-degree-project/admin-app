@@ -78,7 +78,7 @@ export default function LoginForm() {
                         disabled={loading}
                         className="mt-4 bg-black text-white py-2 rounded-full hover:opacity-90 transition-all disabled:opacity-50"
                     >
-                        {loading ? 'Cargando...' : 'Login'}
+                        {loading ? 'Loading...' : 'Login'}
                     </button>
                 </form>
             </div>

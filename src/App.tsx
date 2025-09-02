@@ -10,6 +10,8 @@ import EditProduct from "./modules/catalog/components/EditProduct";
 import { Analytics } from "./modules/analytics/components/Analytics";
 import LoginForm from "./modules/auth/components/LoginForm";
 import ProtectedRoute from "./modules/auth/components/ProtectedRoute";
+import Settings from "./modules/core/components/Settings";
+import Support from "./modules/core/components/SupportPage";
 
 function App() {
   return (
@@ -19,7 +21,7 @@ function App() {
         <Route path="/login" element={<LoginForm />} />
 
         <Route element={<Layout />}>
-          <Route path="/catalog" element={
+          <Route path="/products" element={
             <ProtectedRoute>
               <Catalog />
             </ProtectedRoute>
@@ -42,6 +44,16 @@ function App() {
           <Route path="/analytics" element={
             <ProtectedRoute>
               <Analytics />
+            </ProtectedRoute>
+          } />
+          <Route path="/settings" element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          } />
+          <Route path="/support" element={
+            <ProtectedRoute>
+              <Support />
             </ProtectedRoute>
           } />
         </Route>

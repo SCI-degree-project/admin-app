@@ -39,7 +39,7 @@ const EditProduct: React.FC = () => {
       toast.error("Something went wrong");
     } finally {
       setSubmitting(false);
-      navigate("/catalog");
+      navigate("/products");
     }
   };
 
