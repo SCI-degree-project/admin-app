@@ -16,13 +16,21 @@ export const fetchProductsPaginated = async (
   tenantId: string,
   page: number,
   size: number = 20
-): Promise<{ content: ProductPreview[]; last: boolean }> => {
+): Promise<{
+  content: ProductPreview[];
+  last: boolean;
+  totalPages: number;
+}> => {
   const response = await axios.get(`${API_URL}/products/${tenantId}`, {
     params: { page, size },
   });
 
-  const { content, last } = response.data;
-  return { content: content ?? [], last };
+  const { content, last, totalPages } = response.data;
+  return {
+    content: content ?? [],
+    last,
+    totalPages: totalPages ?? 0,
+  };
 };
 
 export const getProductById = async (
@@ -70,7 +78,7 @@ export const searchProducts = async ({
   page = 0,
   size = 20,
   tenantId
-}: SearchProductParams): Promise<{ content: ProductPreview[]; last: boolean }> => {
+}: SearchProductParams): Promise<{ content: ProductPreview[]; last: boolean; totalPages: number }> => {
   const response = await axios.post(`${API_URL}/products/search`, {
     name,
     style,
@@ -82,6 +90,6 @@ export const searchProducts = async ({
     tenantId
   });
 
-  const { content, last } = response.data;
-  return { content: content ?? [], last };
+  const { content, last, totalPages } = response.data;
+  return { content: content ?? [], last, totalPages: totalPages ?? 0, };
 };

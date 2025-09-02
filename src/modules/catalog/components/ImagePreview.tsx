@@ -7,27 +7,31 @@ type ImagePreviewProps = {
 };
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({ file, onRemove }) => {
-  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    if (typeof file === "string") {
-      setPreviewUrl(file);
+    if (file) {
+      if (typeof file === "string") {
+        setPreviewUrl(file);
+      } else {
+        const objectUrl = URL.createObjectURL(file);
+        setPreviewUrl(objectUrl);
+        return () => URL.revokeObjectURL(objectUrl);
+      }
     } else {
-      const objectUrl = URL.createObjectURL(file);
-      setPreviewUrl(objectUrl);
-
-      return () => URL.revokeObjectURL(objectUrl);
+      setPreviewUrl(null);
     }
   }, [file]);
 
   return (
     <div className="relative group w-16 h-16">
-      <img
-        src={previewUrl}
-        alt="Preview"
-        className="w-full h-full object-cover rounded border"
-      />
-
+      {previewUrl && (
+        <img
+          src={previewUrl}
+          alt="Preview"
+          className="w-full h-full object-cover rounded border"
+        />
+      )}
       <button
         type="button"
         onClick={onRemove}

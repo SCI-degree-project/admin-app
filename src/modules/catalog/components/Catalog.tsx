@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import { fetchProductsPaginated, searchProducts } from "../services/productService";
 import { useTenant } from "../../../context/TenantContext";
@@ -9,89 +9,59 @@ import SearchInput from "./SearchInput";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/react/24/solid";
 
 const Catalog = () => {
   const navigate = useNavigate();
+  const { tenantId } = useTenant();
+  const { handleDeleteProduct } = useDeleteProduct();
+
   const [products, setProducts] = useState<ProductPreview[]>([]);
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const { tenantId } = useTenant();
-  const loaderRef = useRef<HTMLDivElement>(null);
-
-  const { handleDeleteProduct } = useDeleteProduct();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
 
-  const loadMore = useCallback(async () => {
-    if (!tenantId || loading || !hasMore) return;
+  const fetchData = useCallback(async (pageToLoad: number, search = "") => {
+    if (!tenantId) return;
 
     setLoading(true);
-    try {
-      const { content, last } = await fetchProductsPaginated(tenantId, page);
-      if (!Array.isArray(content)) throw new Error("Error");
+    setError(false);
 
-      setProducts((prev) => [...prev, ...content]);
-      setHasMore(!last);
-      setPage((prev) => prev + 1);
+    try {
+      const result = search.trim()
+        ? await searchProducts({ tenantId, name: search, page: pageToLoad })
+        : await fetchProductsPaginated(tenantId, pageToLoad);
+
+      setProducts(result.content);
+      setTotalPages(result.totalPages);
+      setCurrentPage(pageToLoad);
     } catch (err) {
-      console.error("Error fetching products:", err);
+      console.error("Error loading products:", err);
       setError(true);
     } finally {
       setLoading(false);
     }
-  }, [tenantId, page, loading, hasMore]);
+  }, [tenantId]);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMore();
-        }
-      },
-      { threshold: 1 }
-    );
+  const onSearchChange = (term: string) => {
+    setSearchTerm(term);
+    fetchData(0, term);
+  };
 
-    if (loaderRef.current) {
-      observer.observe(loaderRef.current);
+  const handlePageChange = (newPage: number) => {
+    if (newPage !== currentPage) {
+      fetchData(newPage, debouncedSearchTerm);
     }
+  };
 
-    return () => {
-      if (loaderRef.current) {
-        observer.unobserve(loaderRef.current);
-      }
-    };
-  }, [loadMore]);
 
   useEffect(() => {
-    if (!tenantId) return;
-
-    const fetchResults = async () => {
-      if (searchTerm.trim() === "") return;
-      if (debouncedSearchTerm.trim()) {
-        try {
-          const result = await searchProducts({ tenantId, name: debouncedSearchTerm });
-          setProducts(result.content);
-          setHasMore(false);
-        } catch (err) {
-          console.error("Search error:", err);
-        }
-      }
-    };
-
-    fetchResults();
-  }, [debouncedSearchTerm, tenantId]);
-
-  useEffect(() => {
-    if (searchTerm.trim() === "") {
-      setProducts([]);
-      setPage(0);
-      setHasMore(true);
-      loadMore();
-    }
-  }, [searchTerm]);
+    fetchData(currentPage, debouncedSearchTerm);
+  }, [currentPage, debouncedSearchTerm, tenantId]);
 
   const handleDelete = async (productId: string) => {
     if (!tenantId) return;
@@ -99,11 +69,7 @@ const Catalog = () => {
     try {
       await handleDeleteProduct(tenantId, productId);
       toast.success("Product deleted successfully");
-      
-      setProducts([]);
-      setPage(0);
-      setHasMore(true);
-      loadMore();
+      fetchData(currentPage, debouncedSearchTerm);
     } catch (err) {
       console.error("Delete failed:", err);
     }
@@ -112,33 +78,75 @@ const Catalog = () => {
   if (error) return <NotFound />;
 
   return (
-    <div className="py-8 text-primary px-6 md:px-24">
-      <h2 className="text-2xl mb-4">Catalog</h2>
+    <div className="py-4 text-primary px-6 md:px-8">
+      <h2 className="text-2xl mb-4">Products</h2>
 
       <div className="flex items-center gap-4 mb-4">
-        <SearchInput value={searchTerm} onChange={setSearchTerm} />
+        <SearchInput value={searchTerm} onChange={onSearchChange} />
       </div>
 
-      {products.length === 0 && !loading && (
-        <p className="text-center text-gray-500 mt-8">No products.</p>
-      )}
-
-      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            name={product.name}
-            imageUrl={product.cover}
-            onDelete={() => handleDelete(product.id)}
-            onClick={() => navigate(`/product/${product.id}`)}
-            onEdit={() => navigate(`/product/edit/${product.id}`)}
-          />
-        ))}
+      <section className="min-h-[200px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {loading ? (
+          Array.from({ length: 20 }).map((_, i) => (
+            <div key={i} className="w-full h-60 bg-gray-100 animate-pulse rounded-xl" />
+          ))
+        ) : (
+          products.map((product) => (
+            <ProductCard
+              key={product.id}
+              id={product.id}
+              name={product.name}
+              imageUrl={product.cover}
+              onDelete={() => handleDelete(product.id)}
+              onClick={() => navigate(`/product/${product.id}`)}
+              onEdit={() => navigate(`/product/edit/${product.id}`)}
+            />
+          ))
+        )}
       </section>
 
-      {loading && <p className="text-center mt-4 text-gray-500">Loading...</p>}
-      <div ref={loaderRef} className="h-1" />
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-6 gap-2 items-center flex-wrap">
+          <div className="w-9 h-9 flex items-center justify-center">
+            {currentPage > 0 ? (
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="w-9 h-9 flex items-center justify-center"
+              >
+                <ArrowLongLeftIcon className="w-5 h-5 text-black" />
+              </button>
+            ) : (
+              <div className="w-9 h-9" />
+            )}
+          </div>
+
+          <div className="flex gap-2">
+            {Array.from({ length: totalPages }, (_, idx) => (
+              <button
+                key={idx}
+                onClick={() => handlePageChange(idx)}
+                className={`w-9 h-9 flex items-center justify-center rounded-full border 
+            ${idx === currentPage ? "bg-black text-white" : "bg-white text-black border-black"}`}
+              >
+                {idx + 1}
+              </button>
+            ))}
+          </div>
+
+          <div className="w-9 h-9 flex items-center justify-center">
+            {currentPage < totalPages - 1 ? (
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="w-9 h-9 flex items-center justify-center"
+              >
+                <ArrowLongRightIcon className="w-5 h-5 text-black" />
+              </button>
+            ) : (
+              <div className="w-9 h-9" />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
