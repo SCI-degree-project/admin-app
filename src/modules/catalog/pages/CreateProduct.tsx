@@ -1,7 +1,7 @@
 import React from "react";
 import { useTenant } from "../../../context/TenantContext";
 import { useCreateProduct } from "../hooks/useCreateProduct";
-import ProductFormBase from "./ProductFormBase";
+import ProductFormBase from "../components/ProductFormBase";
 import { toast } from "react-toastify";
 
 const CreateProduct: React.FC = () => {

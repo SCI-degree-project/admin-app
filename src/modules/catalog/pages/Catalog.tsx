@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import ProductCard from "./ProductCard";
+import ProductCard from "../components/ProductCard";
 import { fetchProductsPaginated, searchProducts } from "../services/productService";
 import { useTenant } from "../../../context/TenantContext";
 import { NotFound } from "../../core/components/NotFound";
 import { ProductPreview } from "../../../domain/ProductPreview";
 import { useDeleteProduct } from "../hooks/useDeleteProduct";
-import SearchInput from "./SearchInput";
+import SearchInput from "../components/SearchInput";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";

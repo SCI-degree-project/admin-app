@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getProductById } from "../services/productService";
 import { Product } from "../../../domain/Product";
 import { useTenant } from "../../../context/TenantContext";
-import ProductGallery from "./ProductGallery";
+import ProductGallery from "../components/ProductGallery";
 import {
   EyeIcon,
   PencilSquareIcon,
@@ -52,13 +52,19 @@ const ProductDetails: React.FC = () => {
         <ProductGallery images={product.gallery} />
 
         <div className="flex justify-center gap-4 mt-4">
-          <button
-            onClick={() => navigate(`/product/${product.id}/3d`)}
-            className="flex items-center gap-2 px-4 py-2 text-sm border border-blue-600 text-blue-600 rounded hover:bg-blue-600 hover:text-white"
-          >
-            <EyeIcon className="w-5 h-5" />
-            Preview 3D Model
-          </button>
+          {product.model && (
+            <button
+              onClick={() =>
+                navigate(`/product/${product.id}/3d`, {
+                  state: { modelUrl: product.model },
+                })
+              }
+              className="flex items-center gap-2 px-4 py-2 text-sm border border-blue-600 text-blue-600 rounded hover:bg-blue-600 hover:text-white"
+            >
+              <EyeIcon className="w-5 h-5" />
+              Preview 3D Model
+            </button>
+          )}
 
           <button
             onClick={() => navigate(`/product/edit/${product.id}`)}
@@ -94,6 +100,16 @@ const ProductDetails: React.FC = () => {
           <h4 className="font-semibold">Style</h4>
           <p className="text-gray-600">{product.style}</p>
         </div>
+
+        <div>
+          <h4 className="font-semibold">Dimensions (cm)</h4>
+          <div className="flex gap-6 text-gray-600">
+            <p><span className="font-medium">Width:</span> {product.width ?? "-"}</p>
+            <p><span className="font-medium">Height:</span> {product.height ?? "-"}</p>
+            <p><span className="font-medium">Depth:</span> {product.depth ?? "-"}</p>
+          </div>
+        </div>
+
       </div>
 
       <ConfirmPopup

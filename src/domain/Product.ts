@@ -7,7 +7,10 @@ type Product = {
     style: string
     tenantId: string;
     gallery: File[];
-    model: File
+    model: File;
+    width: number;
+    height: number;
+    depth: number
 }
 
 export type { Product };
