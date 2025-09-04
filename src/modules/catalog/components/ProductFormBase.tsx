@@ -12,6 +12,9 @@ type ProductFormBaseProps = {
         price?: number;
         materials?: string[];
         style?: string;
+        width?: number;
+        height?: number;
+        depth?: number;
         gallery?: File[];
         modelFile?: File | null;
     };
@@ -33,11 +36,19 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
     const [price, setPrice] = useState(initialData?.price?.toString() ?? "");
     const [materials, setMaterials] = useState<string[]>(initialData?.materials ?? []);
     const [style, setStyle] = useState<string>(initialData?.style ?? "MODERN");
+
+    const [width, setWidth] = useState(initialData?.width?.toString() ?? "");
+    const [height, setHeight] = useState(initialData?.height?.toString() ?? "");
+    const [depth, setDepth] = useState(initialData?.depth?.toString() ?? "");
+
     const [imageFiles, setImageFiles] = useState<File[]>(initialData?.gallery ?? []);
     const [modelFile, setModelFile] = useState<File | null>(initialData?.modelFile ?? null);
     const [showModelPopup, setShowModelPopup] = useState(false);
 
+    const [errors, setErrors] = useState<{ [key: string]: boolean }>({});
+
     const handleSubmit = (e: React.FormEvent) => {
+        if (!validateForm()) return;
         e.preventDefault();
 
         const formData = new FormData();
@@ -46,6 +57,10 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
         if (description !== initialData?.description) formData.append("description", description);
         if (price !== initialData?.price?.toString()) formData.append("price", price);
         if (style !== initialData?.style) formData.append("style", style);
+
+        if (width !== initialData?.width?.toString()) formData.append("width", width);
+        if (height !== initialData?.height?.toString()) formData.append("height", height);
+        if (depth !== initialData?.depth?.toString()) formData.append("depth", depth);
 
         const originalMaterials = initialData?.materials ?? [];
         const materialsChanged =
@@ -68,18 +83,32 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
         }
     };
 
+    const validateForm = () => {
+        const newErrors: { [key: string]: boolean } = {};
+
+        if (!name.trim()) newErrors.name = true;
+        if (!price.trim()) newErrors.price = true;
+        if (materials.length === 0) newErrors.materials = true;
+        if (!width.trim()) newErrors.width = true;
+        if (!height.trim()) newErrors.height = true;
+        if (!depth.trim()) newErrors.depth = true;
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     return (
         <div>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-base font-semibold text-gray-700">Name *</label>
+                        <label className="block text-base font-semibold text-gray-700">Name</label>
                         <input
                             type="text"
                             value={name}
                             onChange={e => setName(e.target.value)}
                             required
-                            className="w-full border rounded-lg px-4 py-2 mt-1"
+                            className={`border p-2 rounded-xl w-full ${errors.name ? "border-red-500" : "border-gray-400"}`}
                         />
                     </div>
 
@@ -89,19 +118,19 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
                             value={description}
                             onChange={e => setDescription(e.target.value)}
                             rows={3}
-                            className="w-full border rounded-lg px-4 py-2 mt-1"
+                            className="border p-2 rounded-xl w-full border-gray-400"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-base font-semibold text-gray-700">Price *</label>
+                        <label className="block text-base font-semibold text-gray-700">Price</label>
                         <input
                             type="number"
                             value={price}
                             onChange={e => setPrice(e.target.value)}
                             step="0.01"
                             required
-                            className="w-full border rounded-lg px-4 py-2 mt-1"
+                            className={`border p-2 rounded-xl w-full ${errors.name ? "border-red-500" : "border-gray-400"}`}
                         />
                     </div>
 
@@ -110,18 +139,53 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
                         <select
                             value={style}
                             onChange={e => setStyle(e.target.value as Style)}
-                            className="w-full border rounded-lg px-4 py-2 mt-1"
+                            className="border p-2 rounded-xl w-full border-gray-400"
                         >
                             {styleOptions.map(opt => (
                                 <option key={opt} value={opt}>{opt}</option>
                             ))}
                         </select>
                     </div>
+
+                    <div>
+                        <label className="block text-base font-semibold text-gray-700 mb-1">
+                            Dimensions (cm)
+                        </label>
+                        <div className="grid grid-cols-3 gap-4">
+                            <div>
+                                <input
+                                    type="number"
+                                    placeholder="Width"
+                                    value={width}
+                                    onChange={(e) => setWidth(e.target.value)}
+                                    className="border p-2 rounded-xl w-full border-gray-400"
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="number"
+                                    placeholder="Height"
+                                    value={height}
+                                    onChange={(e) => setHeight(e.target.value)}
+                                    className="border p-2 rounded-xl w-full border-gray-400"
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="number"
+                                    placeholder="Depth"
+                                    value={depth}
+                                    onChange={(e) => setDepth(e.target.value)}
+                                    className="border p-2 rounded-xl w-full border-gray-400"
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-base font-semibold text-gray-700 mb-2">Materials *</label>
+                        <label className="block text-base font-semibold text-gray-700 mb-2">Materials</label>
                         <div className="grid grid-cols-2 gap-2">
                             {materialOptions.map(material => (
                                 <label key={material} className="flex items-center space-x-2">
@@ -149,7 +213,7 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
                                 <>
                                     Upload one or more images to visually represent your product. High-quality images help users better understand the product.
                                     <br /> <br />
-                                    Supported formats: <strong>JPG, JPEG, PNG, </strong> and <strong>WEBP</strong> .
+                                    Supported formats: <strong>JPG, JPEG, PNG, </strong> and <strong>WEBP</strong>.
                                 </>
                             </InfoTooltip>
                             <span className="text-xs text-gray-500">({imageFiles.length}/10)</span>
@@ -249,7 +313,6 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
                                 </button>
                             </div>
                         )}
-
                     </div>
                 </div>
 
@@ -262,7 +325,6 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
                         }}
                         onCreateNew={() => {
                             setShowModelPopup(false);
-                            // TODO: Navigate to AR modeling screen if applicable
                         }}
                     />
                 )}
@@ -280,7 +342,6 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
                     ) : (
                         actionName
                     )}
-
                 </button>
                 {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
             </div>

@@ -100,6 +100,16 @@ const ProductDetails: React.FC = () => {
           <h4 className="font-semibold">Style</h4>
           <p className="text-gray-600">{product.style}</p>
         </div>
+
+        <div>
+          <h4 className="font-semibold">Dimensions (cm)</h4>
+          <div className="flex gap-6 text-gray-600">
+            <p><span className="font-medium">Width:</span> {product.width ?? "-"}</p>
+            <p><span className="font-medium">Height:</span> {product.height ?? "-"}</p>
+            <p><span className="font-medium">Depth:</span> {product.depth ?? "-"}</p>
+          </div>
+        </div>
+
       </div>
 
       <ConfirmPopup
