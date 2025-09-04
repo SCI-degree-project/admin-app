@@ -36,7 +36,7 @@ const Support = () => {
                     
                     <div>
                         <h3 className="font-semibold text-gray-800">How do I edit an existing product?</h3>
-                        [cite_start]<p className="text-gray-600">Go to Products > All Products, click "Edit" next to the product, update the fields, and then click "Update." [cite: 293]</p>
+                        [cite_start]<p className="text-gray-600">Go to Products {">"} All Products, click "Edit" next to the product, update the fields, and then click "Update." [cite: 293]</p>
                     </div>
 
                     <div>

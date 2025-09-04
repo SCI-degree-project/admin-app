@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getProductById } from "../services/productService";
 import { useTenant } from "../../../context/TenantContext";
 import { Product } from "../../../domain/Product";
-import ProductFormBase from "./ProductFormBase";
+import ProductFormBase from "../components/ProductFormBase";
 import { toast } from "react-toastify";
 import { useUpdateProduct } from "../hooks/useUpdateProduct";
 
