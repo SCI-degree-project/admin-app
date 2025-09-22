@@ -21,27 +21,27 @@ const Support = () => {
                 <div className="space-y-6">
                     <div>
                         <h3 className="font-semibold text-gray-800">Do I need an account to use the Admin Dashboard?</h3>
-                        [cite_start]<p className="text-gray-600">Yes, only users with an assigned Admin role and a valid Tenant ID can access the platform. [cite: 277]</p>
+                        <p className="text-gray-600">Yes, only users with an assigned Admin role and a valid Tenant ID can access the platform.</p>
                     </div>
 
                     <div>
                         <h3 className="font-semibold text-gray-800">What should I do if I forget my password?</h3>
-                        <p className="text-gray-600">On the login screen, click "Forgot Password." [cite_start]You will receive an email with a link to reset it. [cite: 279]</p>
+                        <p className="text-gray-600">On the login screen, click "Forgot Password." You will receive an email with a link to reset it.</p>
                     </div>
 
                     <div>
                         <h3 className="font-semibold text-gray-800">Can I use DecorAR offline?</h3>
-                        [cite_start]<p className="text-gray-600">No, a stable internet connection is required to access and use the system. [cite: 284]</p>
+                        <p className="text-gray-600">No, a stable internet connection is required to access and use the system.</p>
                     </div>
                     
                     <div>
                         <h3 className="font-semibold text-gray-800">How do I edit an existing product?</h3>
-                        [cite_start]<p className="text-gray-600">Go to Products {">"} All Products, click "Edit" next to the product, update the fields, and then click "Update." [cite: 293]</p>
+                        <p className="text-gray-600">Go to Products {">"} All Products, click "Edit" next to the product, update the fields, and then click "Update."</p>
                     </div>
 
                     <div>
                         <h3 className="font-semibold text-gray-800">Can I recover a deleted product?</h3>
-                        <p className="text-gray-600">Yes. Products are soft-deleted, which means they are hidden but retained in the database. [cite_start]Contact support to request restoration. [cite: 288]</p>
+                        <p className="text-gray-600">Yes. Products are soft-deleted, which means they are hidden but retained in the database. Contact support to request restoration.</p>
                     </div>
                 </div>
             </section>
