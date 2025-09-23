@@ -1,0 +1,100 @@
+{
+    "sidebar": {
+        "general": {
+            "title": "General",
+            "products": "Productos",
+            "new": "Añadir Producto",
+            "analytics": "Métricas"
+        },
+        "account": {
+            "title": "Cuenta",
+            "settings": "Configuración",
+            "support": "Soperte & Ayuda"
+        },
+        "logout": "Cerrar sesión"
+    },
+    "products": {
+        "title": "Productos",
+        "search": {
+            "placeholder": "Buscar..."
+        }
+    },
+    "new-product": {
+        "title": "Añade un Nuevo Producto",
+        "form": {
+            "name": "Nombre",
+            "description": "Descripción",
+            "price": "Precio",
+            "style": "Estilo",
+            "dimensions": "Dimensiones (cm)",
+            "materials": "Materiales",
+            "images": {
+                "title": "Imágenes",
+                "advise": "Añade la imagen de portada primero.",
+                "action": "Añadir"
+            },
+            "3d-model": {
+                "title": "Modelo 3D",
+                "action": "Añadir"
+            }
+        },
+        "action": "Guardar Producto"
+    },
+    "analytics": {
+        "title": "Métricas",
+        "general-stats": {
+            "clicks": "Visitas Totales",
+            "ar-views": "Visualizacioes con AR",
+            "searches": "Búsquedas",
+            "total-products": "Productos Totales"
+        },
+        "specific-stats": {
+            "clicks": {
+                "title": "Más Visitados",
+                "name-col": "Producto",
+                "number-col": "Clicks"
+            },
+            "ar": {
+                "title": "Más visualizados con AR",
+                "name-col": "Producto",
+                "number-col": "Visualizado"
+            },
+            "search": {
+                "title": "Más Buscados",
+                "name-col": "Producto",
+                "number-col": "Búsquedas"
+            }
+        }
+    },
+    "settings": {
+        "loading": "Cargando...",
+        "form": {
+            "title": "Configuración de Tienda",
+            "actions": {
+                "edit": "Editar",
+                "cancel": "Cancelar",
+                "save": "Guardar cambios",
+                "saving": "Guardando..."
+            },
+            "name": "Nombre de Tienda",
+            "address": "Dirección",
+            "description": "Descripción",
+            "phone": "Teléfono"
+        },
+        "language": {
+            "title": "Configuración de Lenguaje",
+            "description": "Selecciona tu lenguaje favorito para la interfaz."
+        }
+    },
+    "materials": {
+        "PINE_WOOD": "Madera de Pino",
+        "OAK_WOOD": "Madera de Roble",
+        "BIRCH_WOOD": "Madera de Abedul",
+        "METAL": "Metal",
+        "IRON": "Hierro",
+        "COPPER": "Cobre",
+        "PLASTIC": "Plástico",
+        "LEATHER": "Cuero",
+        "SYNTHETIC_LEATHER": "Cuero sintético"
+    }
+}
