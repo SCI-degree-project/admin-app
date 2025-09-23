@@ -3,10 +3,12 @@ import { useTenant } from "../../../context/TenantContext";
 import { useCreateProduct } from "../hooks/useCreateProduct";
 import ProductFormBase from "../components/ProductFormBase";
 import { toast } from "react-toastify";
+import { useTranslation } from 'react-i18next';
 
 const CreateProduct: React.FC = () => {
     const { tenantId } = useTenant();
     const { createProduct, loading } = useCreateProduct();
+    const { t } = useTranslation();
 
     const handleSubmit = async (formData: FormData) => {
         if (!tenantId) return;
@@ -24,10 +26,10 @@ const CreateProduct: React.FC = () => {
 
     return (
         <div className="max-w-4xl mx-auto px-4 py-8">
-            <h2 className="text-3xl font-bold mb-6 text-center">Add New Product</h2>
+            <h2 className="text-3xl font-bold mb-6 text-center">{t('new-product.title')}</h2>
             <ProductFormBase
                 onSubmit={handleSubmit}
-                actionName="Save Product"
+                actionName={t('new-product.action')}
                 isSubmitting={loading}
             />
         </div>

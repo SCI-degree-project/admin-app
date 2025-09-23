@@ -10,11 +10,13 @@ import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/react/24/solid";
+import { useTranslation } from 'react-i18next';
 
 const Catalog = () => {
   const navigate = useNavigate();
   const { tenantId } = useTenant();
   const { handleDeleteProduct } = useDeleteProduct();
+  const { t } = useTranslation();
 
   const [products, setProducts] = useState<ProductPreview[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -79,7 +81,7 @@ const Catalog = () => {
 
   return (
     <div className="py-4 text-primary px-6 md:px-8">
-      <h2 className="text-2xl mb-4">Products</h2>
+      <h2 className="text-2xl mb-4">{t('products.title')}</h2>
 
       <div className="flex items-center gap-4 mb-4">
         <SearchInput value={searchTerm} onChange={onSearchChange} />

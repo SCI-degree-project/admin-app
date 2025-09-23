@@ -7,22 +7,22 @@ import {
     ArrowLeftStartOnRectangleIcon,
     QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
-
 import { logout } from "../../auth/services/authService";
-
-const generalNavItems = [
-    { name: "Products", icon: CubeIcon, path: "/products" },
-    { name: "New Product", icon: TagIcon, path: "/new-product" },
-    { name: "Analytics", icon: ChartBarIcon, path: "/analytics" },
-];
-
-const accountNavItems = [
-    { name: "Settings", icon: Cog6ToothIcon, path: "/settings" },
-    { name: "Help & Support", icon: QuestionMarkCircleIcon, path: "/support" },
-];
+import { useTranslation } from 'react-i18next';
 
 export function Sidebar({ isOpen }: { isOpen: boolean }) {
     const location = useLocation();
+    const { t } = useTranslation();
+    const generalNavItems = [
+        { name: t('sidebar.general.products'), icon: CubeIcon, path: "/products" },
+        { name: t('sidebar.general.new'), icon: TagIcon, path: "/new-product" },
+        { name: t('sidebar.general.analytics'), icon: ChartBarIcon, path: "/analytics" },
+    ];
+
+    const accountNavItems = [
+        { name: t('sidebar.account.settings'), icon: Cog6ToothIcon, path: "/settings" },
+        { name: t('sidebar.account.support'), icon: QuestionMarkCircleIcon, path: "/support" },
+    ];
 
     const handleLogout = async () => {
         try {
@@ -41,7 +41,7 @@ export function Sidebar({ isOpen }: { isOpen: boolean }) {
                 className={`flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${location.pathname === path
                     ? "bg-yellow-100 text-yellow-700"
                     : "text-gray-700 hover:bg-gray-100"
-                }`}
+                    }`}
             >
                 <Icon className="w-5 h-5" />
                 {name}
@@ -59,12 +59,12 @@ export function Sidebar({ isOpen }: { isOpen: boolean }) {
                     Decor<span className="text-yellow-400">AR</span>
                 </h1>
 
-                <h2 className="text-xs font-semibold text-gray-400 mb-2 uppercase">General</h2>
+                <h2 className="text-xs font-semibold text-gray-400 mb-2 uppercase">{t('sidebar.general.title')}</h2>
                 <nav className="flex flex-col gap-2 mb-6">
                     {renderNavItems(generalNavItems)}
                 </nav>
 
-                <h2 className="text-xs font-semibold text-gray-400 mb-2 uppercase">Account</h2>
+                <h2 className="text-xs font-semibold text-gray-400 mb-2 uppercase">{t('sidebar.account.title')}</h2>
                 <nav className="flex flex-col gap-2">
                     {renderNavItems(accountNavItems)}
                 </nav>
@@ -76,7 +76,7 @@ export function Sidebar({ isOpen }: { isOpen: boolean }) {
                     className="flex items-center gap-3 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg w-full"
                 >
                     <ArrowLeftStartOnRectangleIcon className="w-5 h-5" />
-                    Log out
+                    {t('sidebar.logout')}
                 </button>
             </div>
         </aside>

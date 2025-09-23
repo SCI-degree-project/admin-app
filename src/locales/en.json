@@ -1,0 +1,100 @@
+{
+    "sidebar": {
+        "general": {
+            "title": "General",
+            "products": "Products",
+            "new": "New Product",
+            "analytics": "Analytics"
+        },
+        "account": {
+            "title": "Account",
+            "settings": "Settings",
+            "support": "Help & Support"
+        },
+        "logout": "Log out"
+    },
+    "products": {
+        "title": "Products",
+        "search": {
+            "placeholder": "Search..."
+        }
+    },
+    "new-product": {
+        "title": "Add new Product",
+        "form": {
+            "name": "Name",
+            "description": "Description",
+            "price": "Price",
+            "style": "Style",
+            "dimensions": "Dimensions (cm)",
+            "materials": "Materials",
+            "images": {
+                "title": "Images",
+                "advise": "Add cover image first.",
+                "action": "Add images"
+            },
+            "3d-model": {
+                "title": "3D Model",
+                "action": "Add new"
+            }
+        },
+        "action": "Save Product"
+    },
+    "analytics": {
+        "title": "Analytics",
+        "general-stats": {
+            "clicks": "Total Visits",
+            "ar-views": "AR Views",
+            "searches": "Searches",
+            "total-products": "Total Products"
+        },
+        "specific-stats": {
+            "clicks": {
+                "title": "Most Viewed",
+                "name-col": "Product",
+                "number-col": "Views"
+            },
+            "ar": {
+                "title": "Most viwed in AR",
+                "name-col": "Product",
+                "number-col": "Views"
+            },
+            "search": {
+                "title": "Most Searched",
+                "name-col": "Product",
+                "number-col": "Searches"
+            }
+        }
+    },
+    "settings": {
+        "loading": "Loading...",
+        "form": {
+            "title": "Store Settings",
+            "actions": {
+                "edit": "Edit",
+                "cancel": "Cancelar",
+                "save": "Guardar cambios",
+                "saving": "Guardando..."
+            },
+            "name": "Name",
+            "address": "Address",
+            "description": "Description",
+            "phone": "Phone"
+        },
+        "language": {
+            "title": "Language Settings",
+            "description": "Choose your preferred language for the application interface."
+        }
+    },
+    "materials": {
+        "PINE_WOOD": "Pine Wood",
+        "OAK_WOOD": "Oak Wood",
+        "BIRCH_WOOD": "Birch Wood",
+        "METAL": "Metal",
+        "IRON": "Iron",
+        "COPPER": "Copper",
+        "PLASTIC": "Plastic",
+        "LEATHER": "Leather",
+        "SYNTHETIC_LEATHER": "Synthetic Leather"
+    }
+}

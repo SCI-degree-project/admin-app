@@ -4,6 +4,7 @@ import { styleOptions, Style } from "../../../domain/Style";
 import InfoTooltip from "../../../assets/InfoTooltip";
 import Model3DUploadPopup from "./Model3DUploadPopup";
 import ImagePreview from "./ImagePreview";
+import { useTranslation } from 'react-i18next';
 
 type ProductFormBaseProps = {
     initialData?: {
@@ -46,6 +47,8 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
     const [showModelPopup, setShowModelPopup] = useState(false);
 
     const [errors, setErrors] = useState<{ [key: string]: boolean }>({});
+
+    const { t } = useTranslation();
 
     const handleSubmit = (e: React.FormEvent) => {
         if (!validateForm()) return;
@@ -102,7 +105,7 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-base font-semibold text-gray-700">Name</label>
+                        <label className="block text-base font-semibold text-gray-700">{t('new-product.form.name')}</label>
                         <input
                             type="text"
                             value={name}
@@ -113,7 +116,7 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
                     </div>
 
                     <div>
-                        <label className="block text-base font-semibold text-gray-700">Description</label>
+                        <label className="block text-base font-semibold text-gray-700">{t('new-product.form.description')}</label>
                         <textarea
                             value={description}
                             onChange={e => setDescription(e.target.value)}
@@ -123,7 +126,7 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
                     </div>
 
                     <div>
-                        <label className="block text-base font-semibold text-gray-700">Price</label>
+                        <label className="block text-base font-semibold text-gray-700">{t('new-product.form.price')}</label>
                         <input
                             type="number"
                             value={price}
@@ -135,7 +138,7 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
                     </div>
 
                     <div>
-                        <label className="block text-base font-semibold text-gray-700">Style</label>
+                        <label className="block text-base font-semibold text-gray-700">{t('new-product.form.style')}</label>
                         <select
                             value={style}
                             onChange={e => setStyle(e.target.value as Style)}
@@ -149,7 +152,7 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
 
                     <div>
                         <label className="block text-base font-semibold text-gray-700 mb-1">
-                            Dimensions (cm)
+                            {t('new-product.form.dimensions')}
                         </label>
                         <div className="grid grid-cols-3 gap-4">
                             <div>
@@ -185,7 +188,7 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
 
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-base font-semibold text-gray-700 mb-2">Materials</label>
+                        <label className="block text-base font-semibold text-gray-700 mb-2">{t('new-product.form.materials')}</label>
                         <div className="grid grid-cols-2 gap-2">
                             {materialOptions.map(material => (
                                 <label key={material} className="flex items-center space-x-2">
@@ -200,7 +203,7 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
                                             )
                                         }
                                     />
-                                    <span className="text-sm">{material}</span>
+                                    <span className="text-sm">{t(`materials.${material}`)}</span>
                                 </label>
                             ))}
                         </div>
@@ -208,7 +211,7 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
 
                     <div>
                         <div className="flex items-center gap-2 mb-1">
-                            <label className="block text-base font-semibold text-gray-700">Images</label>
+                            <label className="block text-base font-semibold text-gray-700">{t('new-product.form.images.title')}</label>
                             <InfoTooltip>
                                 <>
                                     Upload one or more images to visually represent your product. High-quality images help users better understand the product.
@@ -220,22 +223,13 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
                         </div>
 
                         {imageFiles.length === 0 && (
-                            <p className="text-sm text-grey-300 mb-2">Add the cover image first.</p>
+                            <p className="text-sm text-grey-300 mb-2">{t('new-product.form.images.advise')}</p>
                         )}
 
                         {imageFiles.length < 10 && (
                             <div className="mb-4">
                                 <label className="inline-flex items-center px-4 py-2 bg-white text-blue-600 rounded-lg border-2 border-blue-600 shadow-sm hover:bg-blue-600 hover:text-white cursor-pointer transition">
-                                    <svg
-                                        className="w-5 h-5 mr-2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v16h16V4H4zM8 11h8m-4-4v8" />
-                                    </svg>
-                                    Add Images
+                                    {t('new-product.form.images.action')}
                                     <input
                                         type="file"
                                         multiple
@@ -276,7 +270,7 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
 
                     <div>
                         <div className="flex items-center gap-2 mb-1">
-                            <label className="block text-base font-semibold text-gray-700">3D Model</label>
+                            <label className="block text-base font-semibold text-gray-700">{t('new-product.form.3d-model.title')}</label>
                             <InfoTooltip>
                                 <>
                                     Attach a 3D model to allow users to view the product interactively in 360° or AR. Use this to enhance product visualization and engagement.
@@ -295,7 +289,7 @@ const ProductFormBase: React.FC<ProductFormBaseProps> = ({
                                 }`}
                             disabled={!!modelFile}
                         >
-                            Add 3D Model
+                            {t('new-product.form.3d-model.action')}
                         </button>
 
                         {modelFile && (
