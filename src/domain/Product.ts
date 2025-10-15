@@ -1,3 +1,5 @@
+import { GallertItem } from "./GalleryItem";
+
 type Product = {
     id: string;
     name: string;
@@ -6,11 +8,19 @@ type Product = {
     materials: string[];
     style: string
     tenantId: string;
-    gallery: File[];
-    model: File;
+    media: Media
+    dimensions: Dimensions;
+}
+
+type Dimensions = {
     width: number;
     height: number;
-    depth: number
+    depth: number;
+}
+
+type Media = {
+    gallery: GallertItem[];
+    model: File;
 }
 
 export type { Product };
