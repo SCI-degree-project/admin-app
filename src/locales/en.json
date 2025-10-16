@@ -86,6 +86,21 @@
             "description": "Choose your preferred language for the application interface."
         }
     },
+    "details": {
+        "materials": "Materials",
+        "style": "Style",
+        "dimensions": {
+            "title": "Dimensions (cm)",
+            "width": "Width:",
+            "height": "Height:",
+            "depth": "Depth:"
+        },
+        "actions": {
+            "preview": "Preview 3D Model",
+            "edit": "Edit",
+            "delete": "Delete"
+        }
+    },
     "materials": {
         "PINE_WOOD": "Pine Wood",
         "OAK_WOOD": "Oak Wood",

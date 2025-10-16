@@ -12,6 +12,7 @@ import {
 import ConfirmPopup from "../../core/components/ConfirmPopup";
 import { useDeleteProduct } from "../hooks/useDeleteProduct";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const ProductDetails: React.FC = () => {
   const { productId } = useParams();
@@ -23,6 +24,8 @@ const ProductDetails: React.FC = () => {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const { handleDeleteProduct, loading: deleting } = useDeleteProduct();
+
+  const { t } = useTranslation();
 
   const handleDeleteConfirm = async () => {
     if (!tenantId || !productId) return;
@@ -46,23 +49,25 @@ const ProductDetails: React.FC = () => {
   if (loading) return <p className="text-center mt-20">Loading...</p>;
   if (!product) return <p className="text-center mt-20">Product not found</p>;
 
+  const { media, dimensions } = product;
+
   return (
     <div className="flex flex-col md:flex-row gap-8 p-8 max-w-6xl mx-auto">
       <div className="md:w-1/2 space-y-4">
-        <ProductGallery images={product.gallery} />
+        <ProductGallery images={media.gallery} />
 
         <div className="flex justify-center gap-4 mt-4">
-          {product.model && (
+          {media.model && (
             <button
               onClick={() =>
                 navigate(`/product/${product.id}/3d`, {
-                  state: { modelUrl: product.model },
+                  state: { modelUrl: media.model },
                 })
               }
               className="flex items-center gap-2 px-4 py-2 text-sm border border-blue-600 text-blue-600 rounded hover:bg-blue-600 hover:text-white"
             >
               <EyeIcon className="w-5 h-5" />
-              Preview 3D Model
+              {t(`details.actions.preview`)}
             </button>
           )}
 
@@ -71,7 +76,7 @@ const ProductDetails: React.FC = () => {
             className="flex items-center gap-2 px-4 py-2 text-sm border border-yellow-500 text-yellow-500 rounded hover:bg-yellow-500 hover:text-white"
           >
             <PencilSquareIcon className="w-5 h-5" />
-            Edit
+            {t(`details.actions.edit`)}
           </button>
 
           <button
@@ -79,7 +84,7 @@ const ProductDetails: React.FC = () => {
             className="flex items-center gap-2 px-4 py-2 text-sm border border-red-500 text-red-500 rounded hover:bg-red-500 hover:text-white"
           >
             <TrashIcon className="w-5 h-5" />
-            Delete
+            {t(`details.actions.delete`)}
           </button>
         </div>
       </div>
@@ -87,29 +92,41 @@ const ProductDetails: React.FC = () => {
       <div className="md:w-1/2 space-y-4">
         <h2 className="text-3xl font-bold">{product.name}</h2>
         <p className="text-gray-700">{product.description}</p>
-        <p className="text-xl font-semibold text-black-800">BOB {product.price.toFixed(2)}</p>
+        <p className="text-xl font-semibold text-black-800">
+          BOB {product.price.toFixed(2)}
+        </p>
 
         <div>
-          <h4 className="font-semibold">Materials</h4>
+          <h4 className="font-semibold">{t(`details.materials`)}</h4>
           <ul className="list-disc list-inside text-gray-600">
-            {product.materials.map((m, i) => <li key={i}>{m}</li>)}
+            {product.materials.map((m, i) => (
+              <li key={i}>{t(`materials.${m}`)}</li>
+            ))}
           </ul>
         </div>
 
         <div>
-          <h4 className="font-semibold">Style</h4>
+          <h4 className="font-semibold">{t(`details.style`)}</h4>
           <p className="text-gray-600">{product.style}</p>
         </div>
 
         <div>
-          <h4 className="font-semibold">Dimensions (cm)</h4>
+          <h4 className="font-semibold">{t(`details.dimensions.title`)}</h4>
           <div className="flex gap-6 text-gray-600">
-            <p><span className="font-medium">Width:</span> {product.width ?? "-"}</p>
-            <p><span className="font-medium">Height:</span> {product.height ?? "-"}</p>
-            <p><span className="font-medium">Depth:</span> {product.depth ?? "-"}</p>
+            <p>
+              <span className="font-medium">{t(`details.dimensions.width`)}</span>{" "}
+              {dimensions?.width ?? "-"}
+            </p>
+            <p>
+              <span className="font-medium">{t(`details.dimensions.height`)}</span>{" "}
+              {dimensions?.height ?? "-"}
+            </p>
+            <p>
+              <span className="font-medium">{t(`details.dimensions.depth`)}</span>{" "}
+              {dimensions?.depth ?? "-"}
+            </p>
           </div>
         </div>
-
       </div>
 
       <ConfirmPopup

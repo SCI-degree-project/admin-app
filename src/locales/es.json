@@ -86,6 +86,21 @@
             "description": "Selecciona tu lenguaje favorito para la interfaz."
         }
     },
+    "details": {
+        "materials": "Materiales",
+        "style": "Estilo",
+        "dimensions": {
+            "title": "Dimensiones (cm)",
+            "width": "Anchura:",
+            "height": "Altura:",
+            "depth": "Produndidad:"
+        },
+        "actions": {
+            "preview": "Previsualizar Model 3D",
+            "edit": "Editar",
+            "delete": "Eliminar"
+        }
+    },
     "materials": {
         "PINE_WOOD": "Madera de Pino",
         "OAK_WOOD": "Madera de Roble",
